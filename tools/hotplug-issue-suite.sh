@@ -51,17 +51,27 @@ if [ ! -x "$HS" ] || [ ! -x "$HC" ]; then
 fi
 
 detect_iface() {
-	for n in /sys/class/net/*; do
-		[ -e "$n" ] || continue
-		name="$(basename "$n")"
-		[ "$name" = "lo" ] && continue
-		devp="$(readlink -f "$n/device" 2>/dev/null || true)"
-		case "$devp" in
-			*/usb*|*/[0-9]-[0-9]*:[0-9].*)
-				echo "$name"
-				return 0
-				;;
-		esac
+	vid="${VIDPID%:*}"
+	pid="${VIDPID#*:}"
+	for d in /sys/bus/usb/devices/*; do
+		[ -f "$d/idVendor" ] || continue
+		v="$(cat "$d/idVendor" 2>/dev/null || true)"
+		p="$(cat "$d/idProduct" 2>/dev/null || true)"
+		[ "$v" = "$vid" ] || continue
+		[ "$p" = "$pid" ] || continue
+		for ifd in "${d}":*; do
+			[ -d "$ifd" ] || continue
+			for n in /sys/class/net/*; do
+				[ -e "$n" ] || continue
+				name="$(basename "$n")"
+				[ "$name" = "lo" ] && continue
+				devp="$(readlink -f "$n/device" 2>/dev/null || true)"
+				if [ "$devp" = "$(readlink -f "$ifd" 2>/dev/null || true)" ]; then
+					echo "$name"
+					return 0
+				fi
+			done
+		done
 	done
 	return 1
 }
