@@ -64,6 +64,7 @@ ip link set "$IFACE" up
 
 before_tx="$(cat "/sys/class/net/$IFACE/statistics/tx_packets" 2>/dev/null || echo 0)"
 before_bytes="$(cat "/sys/class/net/$IFACE/statistics/tx_bytes" 2>/dev/null || echo 0)"
+dmesg_before_lines="$(dmesg | wc -l | tr -d '[:space:]' || echo 0)"
 
 python3 - "$IFACE" >"$OUTDIR/python.log" <<'PY'
 import socket
@@ -105,7 +106,7 @@ after_bytes="$(cat "/sys/class/net/$IFACE/statistics/tx_bytes" 2>/dev/null || ec
 delta_pkts=$((after_tx - before_tx))
 delta_bytes=$((after_bytes - before_bytes))
 dmesg_tail="$OUTDIR/dmesg-tail.txt"
-dmesg | tail -n 200 >"$dmesg_tail" 2>/dev/null || true
+dmesg | sed -n "$((dmesg_before_lines + 1)),\$p" >"$dmesg_tail" 2>/dev/null || true
 error_hits="$(awk '/(rtw|8814au).*(fail|error|drop|invalid|radiotap)/{c++} END{print c+0}' "$dmesg_tail" 2>/dev/null || echo 0)"
 
 {
