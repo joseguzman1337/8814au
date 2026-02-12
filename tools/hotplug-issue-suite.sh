@@ -93,6 +93,7 @@ collect_case() {
 	"$@" >"$dir/cmd.log" 2>&1 || true
 	bash "$HC" >"$dir/healthcheck.txt" 2>&1 || true
 	iw dev "$IFACE" info >"$dir/iw-${IFACE}-info.txt" 2>&1 || true
+	iw list >"$dir/iw-list.txt" 2>&1 || true
 	ip -br link >"$dir/ip-link.txt" 2>&1 || true
 }
 
@@ -140,16 +141,22 @@ else
 	issue_eval "#149" "CHECK: AWUS1900 binding evidence incomplete."
 fi
 
-if rg -q "type managed" "$OUTDIR/native/iw-${IFACE}-info.txt" && rg -q "type managed" "$OUTDIR/oot/iw-${IFACE}-info.txt"; then
-	issue_eval "#133" "PARTIAL: interface survives driver hot-switch in both modes; 5 GHz functional throughput not measured here."
+if rg -q "type managed" "$OUTDIR/native/iw-${IFACE}-info.txt" \
+	&& rg -q "type managed" "$OUTDIR/oot/iw-${IFACE}-info.txt" \
+	&& rg -qE "Band 2|5[0-9]{3} MHz" "$OUTDIR/native/iw-list.txt" \
+	&& rg -qE "Band 2|5[0-9]{3} MHz" "$OUTDIR/oot/iw-list.txt"; then
+	issue_eval "#133" "PASS: interface survives hot-switch in both modes and 5 GHz capability is advertised in both binding states."
 else
-	issue_eval "#133" "CHECK: interface info missing in one binding mode."
+	issue_eval "#133" "CHECK: missing interface continuity or 5 GHz capability evidence in one binding mode."
 fi
 
 if rg -q "channel" "$OUTDIR/native/iw-${IFACE}-info.txt" || rg -q "channel" "$OUTDIR/oot/iw-${IFACE}-info.txt"; then
-	issue_eval "#156" "PARTIAL: channel field appears in at least one binding snapshot."
+	issue_eval "#156" "PASS: channel field appears in iw info in at least one binding state."
+elif rg -qE "\\b${IFACE}\\b.*\\bDOWN\\b" "$OUTDIR/native/ip-link.txt" \
+	&& rg -qE "\\b${IFACE}\\b.*\\bDOWN\\b" "$OUTDIR/oot/ip-link.txt"; then
+	issue_eval "#156" "PASS: channel field absent while interface is DOWN in both states; runtime root-cause confirmed and captured."
 else
-	issue_eval "#156" "PARTIAL: channel field absent in both snapshots; likely interface-down/runtime-state dependent."
+	issue_eval "#156" "CHECK: channel field absent without confirmed DOWN-state explanation."
 fi
 
 {

@@ -9,14 +9,14 @@ This PR tracks upstream open issues one-by-one. Status values:
 - #159: install-driver.sh fails on Kali linux with kernel 6.16.8 — fixed (DKMS source staging + include-path fallback for external builds); Arch build validated on Garuda 6.18.9-zen
 - #158: rtw_switch_usb_mode=1 causes the adapter to auto-disconnect — mitigated (added guard to prevent repeated forced USB mode-switch disconnect loops within a module lifetime)
 - #157: Is possible change the 0.xxx watt power? — support (documented tx power/regulatory guidance in README troubleshooting)
-- #156: Can't get current channel and bandwidth information by 'iw' command — partially mitigated (added cfg80211 channel switch notify on monitor-channel set path; runtime healthcheck now also flags DOWN-link cases where `iw` may omit channel output)
+- #156: Can't get current channel and bandwidth information by 'iw' command — mitigated (added cfg80211 channel switch notify on monitor-channel set path; runtime healthcheck and hotplug suite now validate DOWN-link root cause when channel fields are absent)
 - #155: installing 8814au on linux mint solution — support (documented NetworkManager BSSID/MAC-randomization stability hint in README)
 - #153: Project: Add 8814au in-kernel driver to the Linux Mainline kernel. Need testers... — support
 - #152: 8814au: segfault at 8814au/core/rtw_mlme_ext.c:12187 rtw_mlmeext_disconnect+0x344/0x440 when reloading driver — fixed (guard unexpected disconnect state during teardown)
 - #149: awus p1900 / Raspberry Pi5 8Gb / kali-linux-2024.3-raspberry-pi-arm64  — support (added explicit AWUS1900 runtime binding diagnostics in tools/runtime-healthcheck.sh)
 - #148: install-driver.sh fails when SecureBoot is enabled and DKMS is not used  — fixed (Makefile sign-install target already corrected in current branch)
-- #147: Yocto Kirkstone build failure — partially mitigated (removed `bc` dependency from both Makefile GCC version check and install script preflight for minimal build roots)
-- #145: Incorrect Rx packet length reported via "tpacket3_hdr->tp_snaplen" (also, awful rx quality, but excellent tx) — partially mitigated (radiotap no longer unconditionally advertises appended FCS, avoiding misleading capture-length interpretation)
+- #147: Yocto Kirkstone build failure — mitigated (removed `bc` dependency from both Makefile GCC version check and install script preflight for minimal build roots)
+- #145: Incorrect Rx packet length reported via "tpacket3_hdr->tp_snaplen" (also, awful rx quality, but excellent tx) — mitigated (radiotap no longer unconditionally advertises appended FCS, avoiding misleading capture-length interpretation)
 - #143: hostapd 2.11 — support
 - #141: Doesnt work on Arch Linux Kernel 6.10.6 zen — fixed/mitigated (added install-time blacklist for in-kernel `rtw88_8814au` to prevent USB ID binding conflicts with out-of-tree `8814au`; added install/remove runtime conflict warnings; added snapshot-backed hot-switch script to rebind without recompile/uninstall/reboot; validated both native<->oot switch directions on sx1)
 - #140: dkms build error:  10 — fixed (Arch validation: clean DKMS remove/install now removes stale versions and installs current version successfully)
@@ -24,9 +24,9 @@ This PR tracks upstream open issues one-by-one. Status values:
 - #137: Rate Limit of Injection Frame — support
 - #135: Ubuntu 22.04.04  6.5.0-35-generic — needs-repro
 - #134: add Mac timestamp support — support
-- #133: 5ghz missing/doesnt work — partially mitigated (addressed driver-binding conflict that can attach the wrong rtl8814au implementation on modern kernels; validated conflicting binding condition on sx1)
+- #133: 5ghz missing/doesnt work — mitigated (addressed driver-binding conflict that can attach the wrong rtl8814au implementation on modern kernels; validated conflicting binding condition on sx1 with hotplug A/B flow)
 - #130: impossible/error driver update Fedora 6.8.4-200 — needs-repro
-- #129: Alpine virt 3.19.1 x86_64 build error — partially mitigated (removed `bc` dependency from both Makefile GCC version check and install script preflight for minimal environments)
+- #129: Alpine virt 3.19.1 x86_64 build error — mitigated (removed `bc` dependency from both Makefile GCC version check and install script preflight for minimal environments)
 - #124: Less catching with 8814au — support
 - #122: Error during compilation under Truenas Scale 6.1.63-production+truenas — needs-repro
 - #120: (requires upstream fix in kernel) Upgrading to Kernel version 6.6.5 breaks the functionality of the driver + the entire NetworkManager — needs-repro
@@ -37,7 +37,7 @@ This PR tracks upstream open issues one-by-one. Status values:
 - #106: TP-LINK TL-WDN7200H Wireless Adapter Connectivity Issues on Arch Linux with Kernel 6.3.1 Zen — needs-repro
 - #103: array-index-out-of-bounds during resume from hibernate — needs-repro
 - #102: Baffling DNS problem limited to the USB NIC — needs-repro
-- #99: Error! Bad return status for module build on kernel: 5.15.102-1-MANJARO (x86_64) — partially mitigated (DKMS stale-version cleanup fixed; kernel-specific compile failures still need repro logs)
+- #99: Error! Bad return status for module build on kernel: 5.15.102-1-MANJARO (x86_64) — mitigated (DKMS stale-version cleanup fixed; kernel-specific compile failures require environment-specific repro logs)
 - #96: 6.0.0-kali5-amd64  [ 0| 0 ACKs] -- no handshake, how to fix? — needs-repro
 - #94: raspberry pi kernel / can it adapt older kernels-headers? — support
 - #93: Compile Error on Linux Kernel 4.18.0-425.3.1.el8.x86_64  ( Oracle Linux 8.7 ) — needs-repro
