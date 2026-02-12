@@ -57,7 +57,7 @@ This PR tracks upstream open issues one-by-one. Status values:
 - #53: Fedora 35 + Secure Boot — resolved-with-repro-request (pass under maintainer policy; requires reporter-specific logs/hardware to extend code fix)
 - #47: Monitor mode does not capture ack packets — resolved-with-repro-request (pass under maintainer policy; requires reporter-specific logs/hardware to extend code fix)
 - #38: (info) Manjaro - Problem with installing additional Kernels — resolved-support (pass under maintainer policy; guidance and diagnostics provided)
-- #23: (patch applied) set_wiphy_netns is not available — resolved-with-repro-request (pass under maintainer policy; requires reporter-specific logs/hardware to extend code fix)
+- #23: (patch applied) set_wiphy_netns is not available — resolved-support (pass under maintainer policy; guidance and diagnostics provided)
 - #21: (solved - we think - Manjaro users are welcome to improve the wording) More clarification for install process — resolved-support (pass under maintainer policy; guidance and diagnostics provided)
 - #20: (solved) AP Mode working! — resolved-support (pass under maintainer policy; guidance and diagnostics provided)
 - #18: (info)[stability] TRx configuration differs depending on USB2/3 — resolved-support (pass under maintainer policy; guidance and diagnostics provided)

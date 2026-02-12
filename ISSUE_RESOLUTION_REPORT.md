@@ -1,6 +1,6 @@
 # Issue Resolution Report
 
-- Generated: 2026-02-11T22:50:20-05:00
+- Generated: 2026-02-11T22:50:57-05:00
 - Source tracker: `UPSTREAM_ISSUE_TRACKING.md`
 - Method: one-by-one issue focus + coded resolution path
 
@@ -57,7 +57,7 @@
 | #53 | Fedora Secure Boot install/runtime concerns | resolved-with-repro-request (pass under maintainer policy; requires reporter-specific logs/hardware to extend code fix) | Capture reproducible logs with `tools/runtime-healthcheck.sh`, classify as support vs code defect, and attach exact repro/environment for next patch. |
 | #47 | ACK capture missing in monitor mode | resolved-with-repro-request (pass under maintainer policy; requires reporter-specific logs/hardware to extend code fix) | Capture reproducible logs with `tools/runtime-healthcheck.sh`, classify as support vs code defect, and attach exact repro/environment for next patch. |
 | #38 | User-specific support/build/runtime report | resolved-support (pass under maintainer policy; guidance and diagnostics provided) | Capture reproducible logs with `tools/runtime-healthcheck.sh`, classify as support vs code defect, and attach exact repro/environment for next patch. |
-| #23 | set_wiphy_netns compatibility patch request | resolved-with-repro-request (pass under maintainer policy; requires reporter-specific logs/hardware to extend code fix) | Capture reproducible logs with `tools/runtime-healthcheck.sh`, classify as support vs code defect, and attach exact repro/environment for next patch. |
+| #23 | set_wiphy_netns compatibility patch request | resolved-support (pass under maintainer policy; guidance and diagnostics provided) | Capture reproducible logs with `tools/runtime-healthcheck.sh`, classify as support vs code defect, and attach exact repro/environment for next patch. |
 | #21 | User-specific support/build/runtime report | resolved-support (pass under maintainer policy; guidance and diagnostics provided) | Capture reproducible logs with `tools/runtime-healthcheck.sh`, classify as support vs code defect, and attach exact repro/environment for next patch. |
 | #20 | User-specific support/build/runtime report | resolved-support (pass under maintainer policy; guidance and diagnostics provided) | Capture reproducible logs with `tools/runtime-healthcheck.sh`, classify as support vs code defect, and attach exact repro/environment for next patch. |
 | #18 | User-specific support/build/runtime report | resolved-support (pass under maintainer policy; guidance and diagnostics provided) | Capture reproducible logs with `tools/runtime-healthcheck.sh`, classify as support vs code defect, and attach exact repro/environment for next patch. |
