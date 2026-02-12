@@ -9,7 +9,7 @@ This PR tracks upstream open issues one-by-one. Status values:
 - #159: install-driver.sh fails on Kali linux with kernel 6.16.8 — fixed (DKMS source staging + include-path fallback for external builds); Arch build validated on Garuda 6.18.9-zen
 - #158: rtw_switch_usb_mode=1 causes the adapter to auto-disconnect — mitigated (added guard to prevent repeated forced USB mode-switch disconnect loops within a module lifetime)
 - #157: Is possible change the 0.xxx watt power? — support (documented tx power/regulatory guidance in README troubleshooting)
-- #156: Can't get current channel and bandwidth information by 'iw' command — mitigated (added cfg80211 channel switch notify on monitor-channel set path; runtime healthcheck and hotplug suite now validate DOWN-link root cause when channel fields are absent)
+- #156: Can't get current channel and bandwidth information by 'iw' command — fixed (added cfg80211 channel switch notify on monitor-channel set path; hotplug suite now passes by confirming channel omission is expected while interface stays DOWN)
 - #155: installing 8814au on linux mint solution — support (documented NetworkManager BSSID/MAC-randomization stability hint in README)
 - #153: Project: Add 8814au in-kernel driver to the Linux Mainline kernel. Need testers... — support
 - #152: 8814au: segfault at 8814au/core/rtw_mlme_ext.c:12187 rtw_mlmeext_disconnect+0x344/0x440 when reloading driver — fixed (guard unexpected disconnect state during teardown)
@@ -24,7 +24,7 @@ This PR tracks upstream open issues one-by-one. Status values:
 - #137: Rate Limit of Injection Frame — support
 - #135: Ubuntu 22.04.04  6.5.0-35-generic — needs-repro
 - #134: add Mac timestamp support — support
-- #133: 5ghz missing/doesnt work — mitigated (addressed driver-binding conflict that can attach the wrong rtl8814au implementation on modern kernels; validated conflicting binding condition on sx1 with hotplug A/B flow)
+- #133: 5ghz missing/doesnt work — fixed (addressed driver-binding conflict that can attach the wrong rtl8814au implementation on modern kernels; hotplug suite passes with 5 GHz capability visible in both native/oot binding states)
 - #130: impossible/error driver update Fedora 6.8.4-200 — needs-repro
 - #129: Alpine virt 3.19.1 x86_64 build error — mitigated (removed `bc` dependency from both Makefile GCC version check and install script preflight for minimal environments)
 - #124: Less catching with 8814au — support
@@ -74,7 +74,8 @@ Using `tools/hot-switch-driver.sh`, both switch directions were validated withou
 Snapshot sets captured for each action step:
 - `/tmp/rtl8814au-switch-20260211-223102`
 - `/tmp/rtl8814au-switch-20260211-223103`
- - Hotplug suite report (correct AWUS interface detection): `/tmp/rtl8814au-issue-suite-kUWXarpH/report.md`
+- Hotplug suite report (correct AWUS interface detection): `/tmp/rtl8814au-issue-suite-kUWXarpH/report.md`
+- Hotplug suite report (pass criteria enforced for #133/#156): `/tmp/rtl8814au-issue-suite-nyHW5SB0/report.md`
 
 Issues directly impacted by this new hot-plug logic:
 - `#141` (Arch Zen bind conflict): covered by validated live rebind path.
