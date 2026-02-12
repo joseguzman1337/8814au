@@ -64,3 +64,23 @@ This PR tracks upstream open issues one-by-one. Status values:
 - #11: (solved) Fedora Install — support
 - #10: Not an issue - Just a note of thanks — support
 - #8: (solved) txpower fixed @12.00 dBm — support
+
+## Hot-Plug Reassessment (sx1, February 11, 2026)
+
+Using `tools/hot-switch-driver.sh`, both switch directions were validated without recompile/uninstall/reboot:
+- native (`rtw88_8814au`) -> oot (`rtl8814au`)
+- oot (`rtl8814au`) -> native (`rtw88_8814au`)
+
+Snapshot sets captured for each action step:
+- `/tmp/rtl8814au-switch-20260211-223102`
+- `/tmp/rtl8814au-switch-20260211-223103`
+
+Issues directly impacted by this new hot-plug logic:
+- `#141` (Arch Zen bind conflict): covered by validated live rebind path.
+- `#133` (5 GHz missing): partially covered by enabling deterministic driver rebind for comparison/testing.
+- `#149` (AWUS1900 usability): covered by validated hot-switch + runtime binding diagnostics.
+- `#156` (missing channel info): partially aided by allowing same-session A/B checks between native and oot bindings.
+
+Issues not directly impacted by hot-plug logic:
+- Pure build/install failures (`#159`, `#148`, `#147`, `#129`, `#140`, `#99`, etc.) remain governed by Makefile/install-script fixes.
+- Protocol/feature/runtime behavior reports (`#145`, `#79`, `#47`, `#70`, etc.) still require targeted reproductions beyond bind switching.
