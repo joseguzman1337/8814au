@@ -15,7 +15,7 @@ This PR tracks upstream open issues one-by-one. Status values:
 - #152: 8814au: segfault at 8814au/core/rtw_mlme_ext.c:12187 rtw_mlmeext_disconnect+0x344/0x440 when reloading driver — fixed (guard unexpected disconnect state during teardown)
 - #149: awus p1900 / Raspberry Pi5 8Gb / kali-linux-2024.3-raspberry-pi-arm64  — support
 - #148: install-driver.sh fails when SecureBoot is enabled and DKMS is not used  — fixed (Makefile sign-install target already corrected in current branch)
-- #147: Yocto Kirkstone build failure — partially mitigated (removed `bc` dependency from Makefile GCC version check for minimal build roots)
+- #147: Yocto Kirkstone build failure — partially mitigated (removed `bc` dependency from both Makefile GCC version check and install script preflight for minimal build roots)
 - #145: Incorrect Rx packet length reported via "tpacket3_hdr->tp_snaplen" (also, awful rx quality, but excellent tx) — partially mitigated (radiotap no longer unconditionally advertises appended FCS, avoiding misleading capture-length interpretation)
 - #143: hostapd 2.11 — support
 - #141: Doesnt work on Arch Linux Kernel 6.10.6 zen — fixed/mitigated (added install-time blacklist for in-kernel `rtw88_8814au` to prevent USB ID binding conflicts with out-of-tree `8814au`; added install/remove runtime conflict warnings; conflict reproduced on sx1 and validated via per-interface USB binding diagnostics)
@@ -26,7 +26,7 @@ This PR tracks upstream open issues one-by-one. Status values:
 - #134: add Mac timestamp support — support
 - #133: 5ghz missing/doesnt work — partially mitigated (addressed driver-binding conflict that can attach the wrong rtl8814au implementation on modern kernels; validated conflicting binding condition on sx1)
 - #130: impossible/error driver update Fedora 6.8.4-200 — needs-repro
-- #129: Alpine virt 3.19.1 x86_64 build error — partially mitigated (removed `bc` dependency from Makefile GCC version check for minimal environments)
+- #129: Alpine virt 3.19.1 x86_64 build error — partially mitigated (removed `bc` dependency from both Makefile GCC version check and install script preflight for minimal environments)
 - #124: Less catching with 8814au — support
 - #122: Error during compilation under Truenas Scale 6.1.63-production+truenas — needs-repro
 - #120: (requires upstream fix in kernel) Upgrading to Kernel version 6.6.5 breaks the functionality of the driver + the entire NetworkManager — needs-repro
