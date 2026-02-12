@@ -17,6 +17,30 @@ else
 fi
 echo
 
+echo "== USB binding detail (0bda:8813) =="
+if [ -d /sys/bus/usb/devices ]; then
+	found_usb=0
+	for d in /sys/bus/usb/devices/*; do
+		[ -f "$d/idVendor" ] || continue
+		v="$(cat "$d/idVendor" 2>/dev/null || true)"
+		p="$(cat "$d/idProduct" 2>/dev/null || true)"
+		[ "$v" = "0bda" ] || continue
+		[ "$p" = "8813" ] || continue
+		found_usb=1
+		echo "Device node: $d"
+		# interface nodes (e.g. 2-3:1.0) hold the effective driver binding
+		for ifd in "${d}":*; do
+			[ -d "$ifd" ] || continue
+			drv="$(readlink -f "$ifd/driver" 2>/dev/null | awk -F/ '{print $NF}')"
+			echo "  Interface $(basename "$ifd") driver: ${drv:-unbound}"
+		done
+	done
+	[ "$found_usb" -eq 1 ] || echo "No 0bda:8813 USB node found in /sys"
+else
+	echo "/sys/bus/usb/devices not available on this host"
+fi
+echo
+
 echo "== Module state =="
 if command -v lsmod >/dev/null 2>&1; then
 	lsmod | grep -E '^(8814au|rtw88_8814au|rtw88_usb|rtw88_core)\b' || echo "No 8814au/rtw88 modules currently loaded"
