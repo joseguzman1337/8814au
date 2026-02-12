@@ -219,6 +219,42 @@ sudo ./remove-driver.sh
 
 ---
 
+## Troubleshooting
+
+<details>
+<summary><b>Arch/modern kernel binding conflict (AWUS1900/RTL8814AU)</b></summary>
+
+Some modern kernels include an in-kernel `rtw88_8814au` driver that may bind to the same USB IDs as this out-of-tree `8814au` driver.
+If both are active, behavior can be inconsistent.
+
+Check current runtime state without changing anything:
+
+```bash
+./tools/runtime-healthcheck.sh
+```
+
+If the report shows both `8814au` and `rtw88_8814au` loaded, your system is in a mixed-driver state.
+This repo now installs a blacklist file for `rtw88_8814au` during `install-driver.sh` to avoid future conflicts.
+
+</details>
+
+<details>
+<summary><b>`iw dev &lt;if&gt; info` missing channel/bandwidth fields</b></summary>
+
+If channel fields are missing, first confirm link state:
+
+```bash
+ip -br link
+iw dev
+```
+
+Some kernel/driver combinations omit channel details while the interface is `DOWN`.
+The runtime healthcheck script prints this hint and the current interface state.
+
+</details>
+
+---
+
 ## WiFi Router Recommendations
 
 <details>

@@ -62,16 +62,20 @@ echo
 echo "== Conflict heuristic =="
 has_oot=0
 has_native=0
+can_eval=0
 if command -v lsmod >/dev/null 2>&1; then
+	can_eval=1
 	if lsmod | grep -q '^8814au\b'; then has_oot=1; fi
 	if lsmod | grep -q '^rtw88_8814au\b'; then has_native=1; fi
 else
 	echo "lsmod not available; cannot evaluate loaded-module conflict"
 fi
 
-if [ "$has_oot" -eq 1 ] && [ "$has_native" -eq 1 ]; then
-	echo "WARNING: Both out-of-tree 8814au and in-kernel rtw88_8814au are loaded."
-	echo "This can cause unstable binding/behavior on RTL8814AU USB adapters."
-else
-	echo "No simultaneous 8814au + rtw88_8814au load detected."
+if [ "$can_eval" -eq 1 ]; then
+	if [ "$has_oot" -eq 1 ] && [ "$has_native" -eq 1 ]; then
+		echo "WARNING: Both out-of-tree 8814au and in-kernel rtw88_8814au are loaded."
+		echo "This can cause unstable binding/behavior on RTL8814AU USB adapters."
+	else
+		echo "No simultaneous 8814au + rtw88_8814au load detected."
+	fi
 fi
