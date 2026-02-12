@@ -19,7 +19,7 @@ This PR tracks upstream open issues one-by-one. Status values:
 - #145: Incorrect Rx packet length reported via "tpacket3_hdr->tp_snaplen" (also, awful rx quality, but excellent tx) — needs-repro
 - #143: hostapd 2.11 — support
 - #141: Doesnt work on Arch Linux Kernel 6.10.6 zen — needs-repro (not reproduced on Garuda 6.18.9-zen; full module build succeeds)
-- #140: dkms build error:  10 — needs-repro
+- #140: dkms build error:  10 — fixed (Arch validation: clean DKMS remove/install now removes stale versions and installs current version successfully)
 - #139: Build issue on 5.14 kernel / Rockylinux 9 — needs-repro
 - #137: Rate Limit of Injection Frame — support
 - #135: Ubuntu 22.04.04  6.5.0-35-generic — needs-repro
@@ -37,7 +37,7 @@ This PR tracks upstream open issues one-by-one. Status values:
 - #106: TP-LINK TL-WDN7200H Wireless Adapter Connectivity Issues on Arch Linux with Kernel 6.3.1 Zen — needs-repro
 - #103: array-index-out-of-bounds during resume from hibernate — needs-repro
 - #102: Baffling DNS problem limited to the USB NIC — needs-repro
-- #99: Error! Bad return status for module build on kernel: 5.15.102-1-MANJARO (x86_64) — needs-repro
+- #99: Error! Bad return status for module build on kernel: 5.15.102-1-MANJARO (x86_64) — partially mitigated (DKMS stale-version cleanup fixed; kernel-specific compile failures still need repro logs)
 - #96: 6.0.0-kali5-amd64  [ 0| 0 ACKs] -- no handshake, how to fix? — needs-repro
 - #94: raspberry pi kernel / can it adapt older kernels-headers? — support
 - #93: Compile Error on Linux Kernel 4.18.0-425.3.1.el8.x86_64  ( Oracle Linux 8.7 ) — needs-repro
