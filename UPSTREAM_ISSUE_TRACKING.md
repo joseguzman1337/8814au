@@ -36,7 +36,7 @@ This PR tracks upstream open issues one-by-one. Status values:
 - #114: Error building driver when updating linux kernel — mitigated (compiler-flag compatibility probing + uninitialized warning fix reduce Werror-triggered DKMS breakage during kernel updates)
 - #111: When compiling openwrt, add 8814au driver — resolved-support (pass under maintainer policy; guidance and diagnostics provided)
 - #106: TP-LINK TL-WDN7200H Wireless Adapter Connectivity Issues on Arch Linux with Kernel 6.3.1 Zen — resolved-with-repro-request (pass under maintainer policy; requires reporter-specific logs/hardware to extend code fix)
-- #103: array-index-out-of-bounds during resume from hibernate — resolved-with-repro-request (pass under maintainer policy; requires reporter-specific logs/hardware to extend code fix)
+- #103: array-index-out-of-bounds during resume from hibernate — fixed (clamp `bb_swing_idx_ofdm` before indexing `tx_scaling_table_jaguar` in rtl8814a power-tracking paths)
 - #102: Baffling DNS problem limited to the USB NIC — resolved-with-repro-request (pass under maintainer policy; requires reporter-specific logs/hardware to extend code fix)
 - #99: Error! Bad return status for module build on kernel: 5.15.102-1-MANJARO (x86_64) — mitigated (DKMS stale-version cleanup fixed; kernel-specific compile failures require environment-specific repro logs)
 - #96: 6.0.0-kali5-amd64  [ 0| 0 ACKs] -- no handshake, how to fix? — resolved-with-repro-request (pass under maintainer policy; requires reporter-specific logs/hardware to extend code fix)

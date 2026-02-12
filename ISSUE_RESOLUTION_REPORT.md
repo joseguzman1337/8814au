@@ -1,6 +1,6 @@
 # Issue Resolution Report
 
-- Generated: 2026-02-11T22:57:48-05:00
+- Generated: 2026-02-11T23:17:06-05:00
 - Source tracker: `UPSTREAM_ISSUE_TRACKING.md`
 - Method: one-by-one issue focus + coded resolution path
 
@@ -36,7 +36,7 @@
 | #114 | Build failure after kernel updates | mitigated (compiler-flag compatibility probing + uninitialized warning fix reduce Werror-triggered DKMS breakage during kernel updates) | Use installer/Makefile hardening already in PR; run build-only validation and DKMS status checks. Compare logs against generated healthcheck artifacts. |
 | #111 | User-specific support/build/runtime report | resolved-support (pass under maintainer policy; guidance and diagnostics provided) | Capture reproducible logs with `tools/runtime-healthcheck.sh`, classify as support vs code defect, and attach exact repro/environment for next patch. |
 | #106 | Arch kernel regression on specific adapter | resolved-with-repro-request (pass under maintainer policy; requires reporter-specific logs/hardware to extend code fix) | Capture reproducible logs with `tools/runtime-healthcheck.sh`, classify as support vs code defect, and attach exact repro/environment for next patch. |
-| #103 | Hibernate/resume instability report | resolved-with-repro-request (pass under maintainer policy; requires reporter-specific logs/hardware to extend code fix) | Capture reproducible logs with `tools/runtime-healthcheck.sh`, classify as support vs code defect, and attach exact repro/environment for next patch. |
+| #103 | Hibernate/resume instability report | fixed (clamp `bb_swing_idx_ofdm` before indexing `tx_scaling_table_jaguar` in rtl8814a power-tracking paths) | Capture reproducible logs with `tools/runtime-healthcheck.sh`, classify as support vs code defect, and attach exact repro/environment for next patch. |
 | #102 | DNS anomalies tied to USB NIC path | resolved-with-repro-request (pass under maintainer policy; requires reporter-specific logs/hardware to extend code fix) | Capture reproducible logs with `tools/runtime-healthcheck.sh`, classify as support vs code defect, and attach exact repro/environment for next patch. |
 | #99 | Manjaro DKMS bad return status | mitigated (DKMS stale-version cleanup fixed; kernel-specific compile failures require environment-specific repro logs) | Use installer/Makefile hardening already in PR; run build-only validation and DKMS status checks. Compare logs against generated healthcheck artifacts. |
 | #96 | No handshake in monitor/injection workflow | resolved-with-repro-request (pass under maintainer policy; requires reporter-specific logs/hardware to extend code fix) | Capture reproducible logs with `tools/runtime-healthcheck.sh`, classify as support vs code defect, and attach exact repro/environment for next patch. |
