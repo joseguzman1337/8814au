@@ -157,6 +157,29 @@ require_driver_node() {
 	return 0
 }
 
+ensure_target_driver_node() {
+	if require_driver_node "$TARGET_DRIVER"; then
+		return 0
+	fi
+
+	# First try regular module resolution.
+	modprobe "$TARGET_MODULE" 2>/dev/null || true
+	if require_driver_node "$TARGET_DRIVER"; then
+		return 0
+	fi
+
+	# Fallback for out-of-tree flow when module is built locally but not installed.
+	if [ "$TARGET" = "oot" ]; then
+		if [ -f "./8814au.ko" ]; then
+			insmod ./8814au.ko 2>/dev/null || true
+		elif [ -f "../8814au.ko" ]; then
+			insmod ../8814au.ko 2>/dev/null || true
+		fi
+	fi
+
+	require_driver_node "$TARGET_DRIVER"
+}
+
 current_driver_for_iface() {
 	iface="$1"
 	readlink -f "/sys/bus/usb/devices/$iface/driver" 2>/dev/null | awk -F/ '{print $NF}'
@@ -175,7 +198,7 @@ CUR_DRIVER="$(current_driver_for_iface "$IFACE_ID" || true)"
 echo "Current bound driver: ${CUR_DRIVER:-unbound}"
 echo "Target driver: $TARGET_DRIVER"
 
-require_driver_node "$TARGET_DRIVER"
+ensure_target_driver_node
 
 if [ "$CUR_DRIVER" = "$TARGET_DRIVER" ]; then
 	echo "Already bound to target driver; no switch needed."
@@ -191,7 +214,8 @@ if [ -n "$CUR_DRIVER" ] && [ -e "/sys/bus/usb/drivers/$CUR_DRIVER/unbind" ]; the
 fi
 
 snap "20-before-modprobe-target"
-modprobe "$TARGET_MODULE"
+modprobe "$TARGET_MODULE" 2>/dev/null || true
+ensure_target_driver_node
 snap "21-after-modprobe-target"
 
 if [ ! -e "/sys/bus/usb/drivers/$TARGET_DRIVER/bind" ]; then
