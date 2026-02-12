@@ -13,7 +13,7 @@ This PR tracks upstream open issues one-by-one. Status values:
 - #155: installing 8814au on linux mint solution — support (documented NetworkManager BSSID/MAC-randomization stability hint in README)
 - #153: Project: Add 8814au in-kernel driver to the Linux Mainline kernel. Need testers... — support
 - #152: 8814au: segfault at 8814au/core/rtw_mlme_ext.c:12187 rtw_mlmeext_disconnect+0x344/0x440 when reloading driver — fixed (guard unexpected disconnect state during teardown)
-- #149: awus p1900 / Raspberry Pi5 8Gb / kali-linux-2024.3-raspberry-pi-arm64  — support
+- #149: awus p1900 / Raspberry Pi5 8Gb / kali-linux-2024.3-raspberry-pi-arm64  — support (added explicit AWUS1900 runtime binding diagnostics in tools/runtime-healthcheck.sh)
 - #148: install-driver.sh fails when SecureBoot is enabled and DKMS is not used  — fixed (Makefile sign-install target already corrected in current branch)
 - #147: Yocto Kirkstone build failure — partially mitigated (removed `bc` dependency from both Makefile GCC version check and install script preflight for minimal build roots)
 - #145: Incorrect Rx packet length reported via "tpacket3_hdr->tp_snaplen" (also, awful rx quality, but excellent tx) — partially mitigated (radiotap no longer unconditionally advertises appended FCS, avoiding misleading capture-length interpretation)
