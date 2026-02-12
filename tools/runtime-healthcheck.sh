@@ -20,6 +20,8 @@ echo
 echo "== USB binding detail (0bda:8813) =="
 if [ -d /sys/bus/usb/devices ]; then
 	found_usb=0
+	awus_bound_native=0
+	awus_bound_oot=0
 	for d in /sys/bus/usb/devices/*; do
 		[ -f "$d/idVendor" ] || continue
 		v="$(cat "$d/idVendor" 2>/dev/null || true)"
@@ -33,6 +35,8 @@ if [ -d /sys/bus/usb/devices ]; then
 			[ -d "$ifd" ] || continue
 			drv="$(readlink -f "$ifd/driver" 2>/dev/null | awk -F/ '{print $NF}')"
 			echo "  Interface $(basename "$ifd") driver: ${drv:-unbound}"
+			[ "${drv:-}" = "rtw88_8814au" ] && awus_bound_native=1
+			[ "${drv:-}" = "rtl8814au" ] && awus_bound_oot=1
 		done
 	done
 	[ "$found_usb" -eq 1 ] || echo "No 0bda:8813 USB node found in /sys"
@@ -99,6 +103,13 @@ if [ "$can_eval" -eq 1 ]; then
 	if [ "$has_oot" -eq 1 ] && [ "$has_native" -eq 1 ]; then
 		echo "WARNING: Both out-of-tree 8814au and in-kernel rtw88_8814au are loaded."
 		echo "This can cause unstable binding/behavior on RTL8814AU USB adapters."
+		if [ "${awus_bound_native:-0}" -eq 1 ]; then
+			echo "AWUS1900 is currently bound to in-kernel rtw88_8814au."
+			echo "Operator action (non-invasive now): keep state as-is and collect evidence."
+			echo "Operator action (maintenance window): rebind policy to a single driver."
+		elif [ "${awus_bound_oot:-0}" -eq 1 ]; then
+			echo "AWUS1900 is currently bound to out-of-tree rtl8814au."
+		fi
 	else
 		echo "No simultaneous 8814au + rtw88_8814au load detected."
 	fi
