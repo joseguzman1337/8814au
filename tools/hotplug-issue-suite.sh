@@ -143,8 +143,8 @@ fi
 
 if rg -q "type managed" "$OUTDIR/native/iw-${IFACE}-info.txt" \
 	&& rg -q "type managed" "$OUTDIR/oot/iw-${IFACE}-info.txt" \
-	&& rg -qE "Band 2|5[0-9]{3} MHz" "$OUTDIR/native/iw-list.txt" \
-	&& rg -qE "Band 2|5[0-9]{3} MHz" "$OUTDIR/oot/iw-list.txt"; then
+	&& rg -q -e 'Band 2' -e '5[0-9]{3} MHz' "$OUTDIR/native/iw-list.txt" \
+	&& rg -q -e 'Band 2' -e '5[0-9]{3} MHz' "$OUTDIR/oot/iw-list.txt"; then
 	issue_eval "#133" "PASS: interface survives hot-switch in both modes and 5 GHz capability is advertised in both binding states."
 else
 	issue_eval "#133" "CHECK: missing interface continuity or 5 GHz capability evidence in one binding mode."
@@ -152,8 +152,8 @@ fi
 
 if rg -q "channel" "$OUTDIR/native/iw-${IFACE}-info.txt" || rg -q "channel" "$OUTDIR/oot/iw-${IFACE}-info.txt"; then
 	issue_eval "#156" "PASS: channel field appears in iw info in at least one binding state."
-elif rg -qE "\\b${IFACE}\\b.*\\bDOWN\\b" "$OUTDIR/native/ip-link.txt" \
-	&& rg -qE "\\b${IFACE}\\b.*\\bDOWN\\b" "$OUTDIR/oot/ip-link.txt"; then
+elif rg -q -e "\\b${IFACE}\\b.*\\bDOWN\\b" "$OUTDIR/native/ip-link.txt" \
+	&& rg -q -e "\\b${IFACE}\\b.*\\bDOWN\\b" "$OUTDIR/oot/ip-link.txt"; then
 	issue_eval "#156" "PASS: channel field absent while interface is DOWN in both states; runtime root-cause confirmed and captured."
 else
 	issue_eval "#156" "CHECK: channel field absent without confirmed DOWN-state explanation."
