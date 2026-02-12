@@ -319,7 +319,16 @@ else
 
 # 	the dkms add command requires source in /usr/src/${DRV_NAME}-${DRV_VERSION}
 	echo "Copying source files to /usr/src/${DRV_NAME}-${DRV_VERSION}"
-	cp -rf "${DRV_DIR}" /usr/src/${DRV_NAME}-${DRV_VERSION}
+	rm -rf /usr/src/${DRV_NAME}-${DRV_VERSION}
+	mkdir -p /usr/src/${DRV_NAME}-${DRV_VERSION}
+	cp -a "${DRV_DIR}/." /usr/src/${DRV_NAME}-${DRV_VERSION}/
+
+	if [ ! -f "/usr/src/${DRV_NAME}-${DRV_VERSION}/include/drv_types.h" ]; then
+		echo "An error occurred while staging DKMS source files."
+		echo "Missing expected file: /usr/src/${DRV_NAME}-${DRV_VERSION}/include/drv_types.h"
+		echo "Please report this error."
+		exit 1
+	fi
 
 	dkms add -m ${DRV_NAME} -v ${DRV_VERSION}
 	RESULT=$?

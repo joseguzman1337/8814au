@@ -55,6 +55,10 @@ endif
 
 ccflags-y += -I$(src)/include
 ccflags-y += -I$(src)/hal/phydm
+ifneq ($(M),)
+ccflags-y += -I$(M)/include
+ccflags-y += -I$(M)/hal/phydm
+endif
 
 ldflags-y += --strip-debug
 

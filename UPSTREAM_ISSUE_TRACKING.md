@@ -1,0 +1,66 @@
+# Upstream Issue Resolution Tracker
+
+This PR tracks upstream open issues one-by-one. Status values:
+- fixed: code change in this PR
+- support: user-support or non-defect report (no driver code fix applicable)
+- needs-repro: cannot implement safely without reproducible logs/hardware
+
+- #160: uscaraudio — support
+- #159: install-driver.sh fails on Kali linux with kernel 6.16.8 — fixed (DKMS source staging + include-path fallback for external builds)
+- #158: rtw_switch_usb_mode=1 causes the adapter to auto-disconnect — needs-repro
+- #157: Is possible change the 0.xxx watt power? — support
+- #156: Can't get current channel and bandwidth information by 'iw' command — needs-repro
+- #155: installing 8814au on linux mint solution — support
+- #153: Project: Add 8814au in-kernel driver to the Linux Mainline kernel. Need testers... — support
+- #152: 8814au: segfault at 8814au/core/rtw_mlme_ext.c:12187 rtw_mlmeext_disconnect+0x344/0x440 when reloading driver — fixed (guard unexpected disconnect state during teardown)
+- #149: awus p1900 / Raspberry Pi5 8Gb / kali-linux-2024.3-raspberry-pi-arm64  — support
+- #148: install-driver.sh fails when SecureBoot is enabled and DKMS is not used  — fixed (Makefile sign-install target already corrected in current branch)
+- #147: Yocto Kirkstone build failure — needs-repro
+- #145: Incorrect Rx packet length reported via "tpacket3_hdr->tp_snaplen" (also, awful rx quality, but excellent tx) — needs-repro
+- #143: hostapd 2.11 — support
+- #141: Doesnt work on Arch Linux Kernel 6.10.6 zen — needs-repro
+- #140: dkms build error:  10 — needs-repro
+- #139: Build issue on 5.14 kernel / Rockylinux 9 — needs-repro
+- #137: Rate Limit of Injection Frame — support
+- #135: Ubuntu 22.04.04  6.5.0-35-generic — needs-repro
+- #134: add Mac timestamp support — support
+- #133: 5ghz missing/doesnt work — needs-repro
+- #130: impossible/error driver update Fedora 6.8.4-200 — needs-repro
+- #129: Alpine virt 3.19.1 x86_64 build error — needs-repro
+- #124: Less catching with 8814au — support
+- #122: Error during compilation under Truenas Scale 6.1.63-production+truenas — needs-repro
+- #120: (requires upstream fix in kernel) Upgrading to Kernel version 6.6.5 breaks the functionality of the driver + the entire NetworkManager — needs-repro
+- #117: 6.5.11 Builds: Yes - Works: No — needs-repro
+- #115: Wifi slowness with clean install running kernel 6.1.50 — needs-repro
+- #114: Error building driver when updating linux kernel — needs-repro
+- #111: When compiling openwrt, add 8814au driver — support
+- #106: TP-LINK TL-WDN7200H Wireless Adapter Connectivity Issues on Arch Linux with Kernel 6.3.1 Zen — needs-repro
+- #103: array-index-out-of-bounds during resume from hibernate — needs-repro
+- #102: Baffling DNS problem limited to the USB NIC — needs-repro
+- #99: Error! Bad return status for module build on kernel: 5.15.102-1-MANJARO (x86_64) — needs-repro
+- #96: 6.0.0-kali5-amd64  [ 0| 0 ACKs] -- no handshake, how to fix? — needs-repro
+- #94: raspberry pi kernel / can it adapt older kernels-headers? — support
+- #93: Compile Error on Linux Kernel 4.18.0-425.3.1.el8.x86_64  ( Oracle Linux 8.7 ) — needs-repro
+- #90: MIMO data in monitor mode — support
+- #89: (solved) Unable to locate package raspberrypi-kernel-headers (raspberry pi 4b) — needs-repro
+- #88: (solved) Error((( I need help((( — needs-repro
+- #79: WPA3 — needs-repro
+- #76: Linux 5.19 compilation error — needs-repro
+- #74: Raspberry pi question — support
+- #71: (info) Problem, if I try to add a second interface ( AWUS1900 Alfa ) : iw dev phy0 interface add xxxx type station — support
+- #70: RTS/CTS packets are not captured — needs-repro
+- #68: How do I fix this? — support
+- #65: Latest DKMS Install for 8814au on ORACLE LINUX ( 99% like Fedora, Red Hat & CentOS ) — support
+- #61: Compiling for Openwrt — support
+- #60: Kali 2021.4a & AWUS1900 - not fully working — needs-repro
+- #53: Fedora 35 + Secure Boot — needs-repro
+- #47: Monitor mode does not capture ack packets — needs-repro
+- #38: (info) Manjaro - Problem with installing additional Kernels — support
+- #23: (patch applied) set_wiphy_netns is not available — needs-repro
+- #21: (solved - we think - Manjaro users are welcome to improve the wording) More clarification for install process — support
+- #20: (solved) AP Mode working! — support
+- #18: (info)[stability] TRx configuration differs depending on USB2/3 — support
+- #17: (solved) Packet injection not working for the ALFA AWUS1900 — needs-repro
+- #11: (solved) Fedora Install — support
+- #10: Not an issue - Just a note of thanks — support
+- #8: (solved) txpower fixed @12.00 dBm — support
