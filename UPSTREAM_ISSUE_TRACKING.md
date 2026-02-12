@@ -74,6 +74,7 @@ Using `tools/hot-switch-driver.sh`, both switch directions were validated withou
 Snapshot sets captured for each action step:
 - `/tmp/rtl8814au-switch-20260211-223102`
 - `/tmp/rtl8814au-switch-20260211-223103`
+ - Hotplug suite report (correct AWUS interface detection): `/tmp/rtl8814au-issue-suite-kUWXarpH/report.md`
 
 Issues directly impacted by this new hot-plug logic:
 - `#141` (Arch Zen bind conflict): covered by validated live rebind path.
