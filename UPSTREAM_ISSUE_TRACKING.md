@@ -6,7 +6,7 @@ This PR tracks upstream open issues one-by-one. Status values:
 - needs-repro: cannot implement safely without reproducible logs/hardware
 
 - #160: uscaraudio — support
-- #159: install-driver.sh fails on Kali linux with kernel 6.16.8 — fixed (DKMS source staging + include-path fallback for external builds)
+- #159: install-driver.sh fails on Kali linux with kernel 6.16.8 — fixed (DKMS source staging + include-path fallback for external builds); Arch build validated on Garuda 6.18.9-zen
 - #158: rtw_switch_usb_mode=1 causes the adapter to auto-disconnect — needs-repro
 - #157: Is possible change the 0.xxx watt power? — support
 - #156: Can't get current channel and bandwidth information by 'iw' command — needs-repro
@@ -18,7 +18,7 @@ This PR tracks upstream open issues one-by-one. Status values:
 - #147: Yocto Kirkstone build failure — needs-repro
 - #145: Incorrect Rx packet length reported via "tpacket3_hdr->tp_snaplen" (also, awful rx quality, but excellent tx) — needs-repro
 - #143: hostapd 2.11 — support
-- #141: Doesnt work on Arch Linux Kernel 6.10.6 zen — needs-repro
+- #141: Doesnt work on Arch Linux Kernel 6.10.6 zen — needs-repro (not reproduced on Garuda 6.18.9-zen; full module build succeeds)
 - #140: dkms build error:  10 — needs-repro
 - #139: Build issue on 5.14 kernel / Rockylinux 9 — needs-repro
 - #137: Rate Limit of Injection Frame — support
