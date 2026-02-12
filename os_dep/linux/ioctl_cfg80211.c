@@ -6169,6 +6169,14 @@ static int cfg80211_rtw_set_monitor_channel(struct wiphy *wiphy
 
 	rtw_set_chbw_cmd(padapter, target_channal, target_width, target_offset, RTW_CMDF_WAIT_ACK);
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 5, 0))
+	/*
+	 * Keep cfg80211's channel state in sync so `iw dev <if> info` reports
+	 * current monitor channel/bandwidth after channel changes.
+	 */
+	rtw_cfg80211_ch_switch_notify(padapter, target_channal, target_width, target_offset, _TRUE, _FALSE);
+#endif
+
 	return 0;
 }
 /*
