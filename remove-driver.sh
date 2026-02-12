@@ -108,23 +108,15 @@ fi
 # determine if dkms is installed and run the appropriate routines
 if command -v dkms >/dev/null 2>&1; then
 	echo "Removing a dkms installation."
-	#  2>/dev/null suppresses the output of dkms
-	dkms remove -m ${DRV_NAME} -v ${DRV_VERSION} --all 2>/dev/null
-	RESULT=$?
-	#echo "Result=${RESULT}"
-
-	# RESULT will be 3 if there are no instances of module to remove
-	# however we still need to remove various files or the install script
-	# may complain.
-	if [ "$RESULT" = "0" ] || [ "$RESULT" = "3" ]; then
-		if [ "$RESULT" = "0" ]; then
-			echo "${DRV_NAME}/${DRV_VERSION} has been removed"
+	# Remove all installed versions for this module to prevent stale dkms entries.
+	dkms status | awk -F, -v drv="${DRV_NAME}" '$1 ~ "^"drv"/" {print $1}' | while read -r modver
+	do
+		ver="${modver#${DRV_NAME}/}"
+		if [ -n "${ver}" ]; then
+			dkms remove -m ${DRV_NAME} -v "${ver}" --all >/dev/null 2>&1 || true
+			echo "${DRV_NAME}/${ver} has been removed"
 		fi
-	else
-		echo "An error occurred. dkms remove error:  ${RESULT}"
-		echo "Please report this error."
-		exit $RESULT
-	fi
+	done
 fi
 
 echo "Removing ${OPTIONS_FILE} from /etc/modprobe.d"

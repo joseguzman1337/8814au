@@ -250,9 +250,14 @@ if command -v dkms >/dev/null 2>&1; then
 	if dkms status | grep -i  ${DRV_NAME}; then
 		echo ": ---------------------------"
 		echo
-# need to add code here to delete any DRV_VERSION
-		echo "Removing a dkms installation."
-		dkms remove -m ${DRV_NAME} -v ${DRV_VERSION} --all
+		echo "Removing existing dkms installations for ${DRV_NAME}."
+		dkms status | awk -F, -v drv="${DRV_NAME}" '$1 ~ "^"drv"/" {print $1}' | while read -r modver
+		do
+			ver="${modver#${DRV_NAME}/}"
+			if [ -n "${ver}" ]; then
+				dkms remove -m ${DRV_NAME} -v "${ver}" --all >/dev/null 2>&1 || true
+			fi
+		done
 		echo "Removing ${OPTIONS_FILE} from /etc/modprobe.d"
 		rm -f /etc/modprobe.d/${OPTIONS_FILE}
 		echo "Removing source files from /usr/src/${DRV_NAME}-${DRV_VERSION}"
