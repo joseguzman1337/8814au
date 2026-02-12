@@ -245,6 +245,14 @@ sudo ./tools/hot-switch-driver.sh --to oot
 
 The script captures pre/post snapshots for each action step under `/tmp/rtl8814au-switch-*`.
 
+To reassess issue-sensitive behavior one-by-one across native vs out-of-tree binding:
+
+```bash
+sudo ./tools/hotplug-issue-suite.sh
+```
+
+This produces a Markdown report plus per-step artifacts under `/tmp/rtl8814au-issue-suite-*`.
+
 </details>
 
 <details>

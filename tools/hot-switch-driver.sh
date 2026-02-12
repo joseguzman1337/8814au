@@ -69,9 +69,14 @@ case "$TARGET" in
 esac
 
 if [ -z "$OUTDIR" ]; then
-	OUTDIR="/tmp/rtl8814au-switch-$(date +%Y%m%d-%H%M%S)"
+	OUTDIR="$(mktemp -d /tmp/rtl8814au-switch-XXXXXXXX)"
+else
+	if [ -e "$OUTDIR" ]; then
+		echo "Output directory already exists: $OUTDIR" >&2
+		exit 1
+	fi
+	mkdir -p "$OUTDIR"
 fi
-mkdir -p "$OUTDIR"
 
 snap() {
 	tag="$1"
@@ -143,6 +148,15 @@ resolve_iface() {
 	return 1
 }
 
+require_driver_node() {
+	drv="$1"
+	if [ ! -d "/sys/bus/usb/drivers/$drv" ]; then
+		echo "Driver node not present: /sys/bus/usb/drivers/$drv" >&2
+		return 1
+	fi
+	return 0
+}
+
 current_driver_for_iface() {
 	iface="$1"
 	readlink -f "/sys/bus/usb/devices/$iface/driver" 2>/dev/null | awk -F/ '{print $NF}'
@@ -160,6 +174,8 @@ echo "Resolved USB interface: $IFACE_ID"
 CUR_DRIVER="$(current_driver_for_iface "$IFACE_ID" || true)"
 echo "Current bound driver: ${CUR_DRIVER:-unbound}"
 echo "Target driver: $TARGET_DRIVER"
+
+require_driver_node "$TARGET_DRIVER"
 
 if [ "$CUR_DRIVER" = "$TARGET_DRIVER" ]; then
 	echo "Already bound to target driver; no switch needed."
