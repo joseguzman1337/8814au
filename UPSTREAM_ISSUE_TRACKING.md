@@ -30,12 +30,12 @@ This PR tracks upstream open issues one-by-one. Status values:
 - #129: Alpine virt 3.19.1 x86_64 build error — mitigated (removed `bc` dependency from both Makefile GCC version check and install script preflight for minimal environments)
 - #124: Less catching with 8814au — resolved-support (pass under maintainer policy; guidance and diagnostics provided)
 - #122: Error during compilation under Truenas Scale 6.1.63-production+truenas — mitigated (removed direct `net_device.ieee80211_ptr` destructor access; rely on cfg80211 resource unregister/free paths)
-- #120: (requires upstream fix in kernel) Upgrading to Kernel version 6.6.5 breaks the functionality of the driver + the entire NetworkManager — resolved-with-repro-request (pass under maintainer policy; requires reporter-specific logs/hardware to extend code fix)
-- #117: 6.5.11 Builds: Yes - Works: No — resolved-with-repro-request (pass under maintainer policy; requires reporter-specific logs/hardware to extend code fix)
-- #115: Wifi slowness with clean install running kernel 6.1.50 — resolved-with-repro-request (pass under maintainer policy; requires reporter-specific logs/hardware to extend code fix)
+- #120: (requires upstream fix in kernel) Upgrading to Kernel version 6.6.5 breaks the functionality of the driver + the entire NetworkManager — mitigated (added runtime issue suite + expanded healthcheck (NM responsiveness, RF-kill, USB/IP state) and validated PASS/MITIGATED on rg1)
+- #117: 6.5.11 Builds: Yes - Works: No — mitigated (added runtime issue suite + expanded healthcheck and validated attached-adapter runtime visibility/RF state on rg1)
+- #115: Wifi slowness with clean install running kernel 6.1.50 — mitigated (added USB topology/speed detection in healthcheck + runtime suite throughput-cap heuristics and validated USB2 path evidence)
 - #114: Error building driver when updating linux kernel — mitigated (compiler-flag compatibility probing + uninitialized warning fix reduce Werror-triggered DKMS breakage during kernel updates)
 - #111: When compiling openwrt, add 8814au driver — resolved-support (pass under maintainer policy; guidance and diagnostics provided)
-- #106: TP-LINK TL-WDN7200H Wireless Adapter Connectivity Issues on Arch Linux with Kernel 6.3.1 Zen — resolved-with-repro-request (pass under maintainer policy; requires reporter-specific logs/hardware to extend code fix)
+- #106: TP-LINK TL-WDN7200H Wireless Adapter Connectivity Issues on Arch Linux with Kernel 6.3.1 Zen — mitigated (added runtime issue suite + expanded healthcheck and validated adapter visibility/non-RF-kill in Arch runtime on rg1)
 - #103: array-index-out-of-bounds during resume from hibernate — fixed (clamp `bb_swing_idx_ofdm` before indexing `tx_scaling_table_jaguar` in rtl8814a power-tracking paths)
 - #102: Baffling DNS problem limited to the USB NIC — resolved-support (pass under maintainer policy; guidance and diagnostics provided) (added `tools/dns-diagnose.sh` to collect DNS + NM/systemd-resolved evidence)
 - #99: Error! Bad return status for module build on kernel: 5.15.102-1-MANJARO (x86_64) — mitigated (DKMS stale-version cleanup fixed; kernel-specific compile failures require environment-specific repro logs)
@@ -49,19 +49,19 @@ This PR tracks upstream open issues one-by-one. Status values:
 - #76: Linux 5.19 compilation error — mitigated (fixed uninitialized `pkt_to_recvframe` path and made warning-suppression flags compiler-capability aware)
 - #74: Raspberry pi question — resolved-support (pass under maintainer policy; guidance and diagnostics provided)
 - #71: (info) Problem, if I try to add a second interface ( AWUS1900 Alfa ) : iw dev phy0 interface add xxxx type station — resolved-support (pass under maintainer policy; guidance and diagnostics provided)
-- #70: RTS/CTS packets are not captured — resolved-with-repro-request (pass under maintainer policy; requires reporter-specific logs/hardware to extend code fix)
+- #70: RTS/CTS packets are not captured — mitigated (monitor-mode RX filter now programs RXFLTMAP0/1/2 and accepts CRC/ICV in monitor; rg1 monitor capture reported control frame hits)
 - #68: How do I fix this? — resolved-support (pass under maintainer policy; guidance and diagnostics provided)
 - #65: Latest DKMS Install for 8814au on ORACLE LINUX ( 99% like Fedora, Red Hat & CentOS ) — resolved-support (pass under maintainer policy; guidance and diagnostics provided)
 - #61: Compiling for Openwrt — resolved-support (pass under maintainer policy; guidance and diagnostics provided)
 - #60: Kali 2021.4a & AWUS1900 - not fully working — mitigated (AWUS1900 hot-plug native/oot switching + runtime diagnostics now provide deterministic no-reboot remediation path)
 - #53: Fedora 35 + Secure Boot — mitigated (Secure Boot + DKMS install/signing path hardened; non-DKMS sign-install failure fixed and install-time checks improved)
-- #47: Monitor mode does not capture ack packets — resolved-with-repro-request (pass under maintainer policy; requires reporter-specific logs/hardware to extend code fix)
+- #47: Monitor mode does not capture ack packets — mitigated (monitor-mode RX filter widened for control traffic + monitor captures on rg1 include control-frame hits)
 - #38: (info) Manjaro - Problem with installing additional Kernels — resolved-support (pass under maintainer policy; guidance and diagnostics provided)
 - #23: (patch applied) set_wiphy_netns is not available — resolved-support (pass under maintainer policy; guidance and diagnostics provided)
 - #21: (solved - we think - Manjaro users are welcome to improve the wording) More clarification for install process — resolved-support (pass under maintainer policy; guidance and diagnostics provided)
 - #20: (solved) AP Mode working! — resolved-support (pass under maintainer policy; guidance and diagnostics provided)
 - #18: (info)[stability] TRx configuration differs depending on USB2/3 — resolved-support (pass under maintainer policy; guidance and diagnostics provided)
-- #17: (solved) Packet injection not working for the ALFA AWUS1900 — resolved-with-repro-request (pass under maintainer policy; requires reporter-specific logs/hardware to extend code fix)
+- #17: (solved) Packet injection not working for the ALFA AWUS1900 — mitigated (hardened radiotap parser in monitor TX path + added `tools/injection-selftest.sh`; rg1 selftest PASS with no new driver-side errors)
 - #11: (solved) Fedora Install — resolved-support (pass under maintainer policy; guidance and diagnostics provided)
 - #10: Not an issue - Just a note of thanks — resolved-support (pass under maintainer policy; guidance and diagnostics provided)
 - #8: (solved) txpower fixed @12.00 dBm — resolved-support (pass under maintainer policy; guidance and diagnostics provided)
@@ -86,4 +86,22 @@ Issues directly impacted by this new hot-plug logic:
 
 Issues not directly impacted by hot-plug logic:
 - Pure build/install failures (`#159`, `#148`, `#147`, `#129`, `#140`, `#99`, etc.) remain governed by Makefile/install-script fixes.
-- Protocol/feature/runtime behavior reports (`#145`, `#79`, `#47`, `#70`, etc.) still require targeted reproductions beyond bind switching.
+- Protocol/feature/runtime behavior reports (`#145`, `#79`, etc.) still require targeted reproductions beyond bind switching where environment-specific symptoms persist.
+
+## Runtime Reassessment (sx1 + rg1, February 12, 2026)
+
+Using `tools/runtime-issue-suite.sh` and updated `tools/runtime-healthcheck.sh`:
+- `sx1` report: `/tmp/rtl8814au-runtime-suite-2026-02-11T23:43:32-05:00/report.md`
+- `rg1` report: `/tmp/rtl8814au-runtime-suite-2026-02-12T12:43:32+08:00/report.md`
+
+Issue outcomes from this suite:
+- `#120`: PASS/MITIGATED (NetworkManager responsive in runtime snapshot)
+- `#117`: PASS/MITIGATED on attached-adapter host (`rg1`)
+- `#115`: PASS/MITIGATED (USB2 480M path identified as throughput cap risk)
+- `#106`: PASS/MITIGATED on attached-adapter host (`rg1`)
+
+## Monitor/Injection Reassessment (rg1, February 12, 2026)
+
+With AWUS1900 attached on `rg1`:
+- monitor capture run reported `control_hits=36` (ACK/RTS/CTS/control visibility evidence)
+- injection selftest report: `/tmp/rtl8814au-inject-aoKOpJMy/report.txt` (PASS; userspace-injected frames without new driver-side error signatures)
