@@ -90,6 +90,14 @@ collect_case() {
 	shift
 	dir="$OUTDIR/$name"
 	mkdir -p "$dir"
+
+	# After rebinding, the kernel may rename the netdev (predictable naming can shift).
+	# If the current IFACE is missing, re-detect from VID:PID and continue.
+	if ! ip link show "$IFACE" >/dev/null 2>&1; then
+		IFACE="$(detect_iface || true)"
+	fi
+
+	echo "$IFACE" >"$dir/iface.txt"
 	"$@" >"$dir/cmd.log" 2>&1 || true
 	bash "$HC" >"$dir/healthcheck.txt" 2>&1 || true
 	iw dev "$IFACE" info >"$dir/iw-${IFACE}-info.txt" 2>&1 || true
@@ -141,8 +149,12 @@ else
 	issue_eval "#149" "CHECK: AWUS1900 binding evidence incomplete."
 fi
 
-if rg -q "type managed" "$OUTDIR/native/iw-${IFACE}-info.txt" \
-	&& rg -q "type managed" "$OUTDIR/oot/iw-${IFACE}-info.txt" \
+native_iface="$(cat "$OUTDIR/native/iface.txt" 2>/dev/null || true)"
+oot_iface="$(cat "$OUTDIR/oot/iface.txt" 2>/dev/null || true)"
+
+if [ -n "$native_iface" ] && [ -n "$oot_iface" ] \
+	&& rg -q "type managed" "$OUTDIR/native/iw-${native_iface}-info.txt" \
+	&& rg -q "type managed" "$OUTDIR/oot/iw-${oot_iface}-info.txt" \
 	&& rg -q -e 'Band 2' -e '5[0-9]{3} MHz' "$OUTDIR/native/iw-list.txt" \
 	&& rg -q -e 'Band 2' -e '5[0-9]{3} MHz' "$OUTDIR/oot/iw-list.txt"; then
 	issue_eval "#133" "PASS: interface survives hot-switch in both modes and 5 GHz capability is advertised in both binding states."
@@ -150,10 +162,12 @@ else
 	issue_eval "#133" "CHECK: missing interface continuity or 5 GHz capability evidence in one binding mode."
 fi
 
-if rg -q "channel" "$OUTDIR/native/iw-${IFACE}-info.txt" || rg -q "channel" "$OUTDIR/oot/iw-${IFACE}-info.txt"; then
+if rg -q "channel" "$OUTDIR/native/iw-${native_iface}-info.txt" 2>/dev/null \
+	|| rg -q "channel" "$OUTDIR/oot/iw-${oot_iface}-info.txt" 2>/dev/null; then
 	issue_eval "#156" "PASS: channel field appears in iw info in at least one binding state."
-elif rg -q -e "\\b${IFACE}\\b.*\\bDOWN\\b" "$OUTDIR/native/ip-link.txt" \
-	&& rg -q -e "\\b${IFACE}\\b.*\\bDOWN\\b" "$OUTDIR/oot/ip-link.txt"; then
+elif [ -n "$native_iface" ] && [ -n "$oot_iface" ] \
+	&& rg -q -e "\\b${native_iface}\\b.*\\bDOWN\\b" "$OUTDIR/native/ip-link.txt" \
+	&& rg -q -e "\\b${oot_iface}\\b.*\\bDOWN\\b" "$OUTDIR/oot/ip-link.txt"; then
 	issue_eval "#156" "PASS: channel field absent while interface is DOWN in both states; runtime root-cause confirmed and captured."
 else
 	issue_eval "#156" "CHECK: channel field absent without confirmed DOWN-state explanation."
