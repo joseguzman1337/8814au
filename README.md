@@ -283,6 +283,22 @@ The runtime healthcheck script prints this hint and the current interface state.
 
 </details>
 
+<details>
+<summary><b>Tx power expectations (RTL8814AU)</b></summary>
+
+- Driver/module settings cannot legally override country regulatory limits.
+- Reported dBm values are not a direct “watt slider”; adapter firmware, regulatory domain, and AP environment all affect effective range.
+- For range improvements, prioritize antenna placement, USB 3.0 signal quality, and channel planning before changing power-related options.
+
+</details>
+
+<details>
+<summary><b>Linux Mint connection stability hint</b></summary>
+
+If roaming instability appears after driver upgrades, test pinning BSSID for the target network in NetworkManager and verify MAC randomization settings for that connection profile.
+
+</details>
+
 ---
 
 ## Tested Distributions
