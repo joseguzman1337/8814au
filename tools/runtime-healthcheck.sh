@@ -50,6 +50,15 @@ else
 fi
 echo
 
+echo "== Link state hint =="
+if command -v ip >/dev/null 2>&1; then
+	ip -br link 2>/dev/null || true
+	echo "Note: some kernels/drivers omit channel details in 'iw dev <if> info' when interface state is DOWN."
+else
+	echo "ip command not available"
+fi
+echo
+
 echo "== Conflict heuristic =="
 has_oot=0
 has_native=0
