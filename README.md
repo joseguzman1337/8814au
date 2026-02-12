@@ -236,6 +236,15 @@ Check current runtime state without changing anything:
 If the report shows both `8814au` and `rtw88_8814au` loaded, your system is in a mixed-driver state.
 This repo now installs a blacklist file for `rtw88_8814au` during `install-driver.sh` to avoid future conflicts.
 
+For maintenance windows where reboot is not allowed, you can hot-switch USB binding between drivers:
+
+```bash
+sudo ./tools/hot-switch-driver.sh --to native
+sudo ./tools/hot-switch-driver.sh --to oot
+```
+
+The script captures pre/post snapshots for each action step under `/tmp/rtl8814au-switch-*`.
+
 </details>
 
 <details>
