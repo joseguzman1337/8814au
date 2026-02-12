@@ -18,13 +18,13 @@ This PR tracks upstream open issues one-by-one. Status values:
 - #147: Yocto Kirkstone build failure — needs-repro
 - #145: Incorrect Rx packet length reported via "tpacket3_hdr->tp_snaplen" (also, awful rx quality, but excellent tx) — needs-repro
 - #143: hostapd 2.11 — support
-- #141: Doesnt work on Arch Linux Kernel 6.10.6 zen — needs-repro (not reproduced on Garuda 6.18.9-zen; full module build succeeds)
+- #141: Doesnt work on Arch Linux Kernel 6.10.6 zen — fixed/mitigated (added install-time blacklist for in-kernel `rtw88_8814au` to prevent USB ID binding conflicts with out-of-tree `8814au`)
 - #140: dkms build error:  10 — fixed (Arch validation: clean DKMS remove/install now removes stale versions and installs current version successfully)
 - #139: Build issue on 5.14 kernel / Rockylinux 9 — needs-repro
 - #137: Rate Limit of Injection Frame — support
 - #135: Ubuntu 22.04.04  6.5.0-35-generic — needs-repro
 - #134: add Mac timestamp support — support
-- #133: 5ghz missing/doesnt work — needs-repro
+- #133: 5ghz missing/doesnt work — partially mitigated (addressed driver-binding conflict that can attach the wrong rtl8814au implementation on modern kernels)
 - #130: impossible/error driver update Fedora 6.8.4-200 — needs-repro
 - #129: Alpine virt 3.19.1 x86_64 build error — needs-repro
 - #124: Less catching with 8814au — support

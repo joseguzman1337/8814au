@@ -38,6 +38,7 @@ MODDESTDIR="/lib/modules/${KVER}/kernel/drivers/net/wireless/"
 
 DRV_NAME="rtl${MODULE_NAME}"
 OPTIONS_FILE="${MODULE_NAME}.conf"
+CONFLICT_BLACKLIST_FILE="blacklist-native-8814au.conf"
 
 # check to ensure sudo was used to start the script
 if [ "$(id -u)" -ne 0 ]; then
@@ -121,6 +122,8 @@ fi
 
 echo "Removing ${OPTIONS_FILE} from /etc/modprobe.d"
 rm -f /etc/modprobe.d/${OPTIONS_FILE}
+echo "Removing ${CONFLICT_BLACKLIST_FILE} from /etc/modprobe.d"
+rm -f /etc/modprobe.d/${CONFLICT_BLACKLIST_FILE}
 echo "Removing source files from /usr/src/${DRV_NAME}-${DRV_VERSION}"
 rm -rf /usr/src/${DRV_NAME}-${DRV_VERSION}
 make clean >/dev/null 2>&1

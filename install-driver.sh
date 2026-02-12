@@ -39,6 +39,7 @@ MODDESTDIR="/lib/modules/${KVER}/kernel/drivers/net/wireless/"
 DRV_NAME="rtl${MODULE_NAME}"
 DRV_DIR="$(pwd)"
 OPTIONS_FILE="${MODULE_NAME}.conf"
+CONFLICT_BLACKLIST_FILE="blacklist-native-8814au.conf"
 
 # check to ensure sudo was used to start the script
 if [ "$(id -u)" -ne 0 ]; then
@@ -272,6 +273,16 @@ echo
 echo "Starting installation."
 echo "Installing ${OPTIONS_FILE} to /etc/modprobe.d"
 cp -f ${OPTIONS_FILE} /etc/modprobe.d
+
+# Prevent driver binding conflicts with the in-kernel rtl8814au implementation.
+if modinfo rtw88_8814au >/dev/null 2>&1; then
+	echo "Detected in-kernel rtw88_8814au module."
+	echo "Blacklisting rtw88_8814au to avoid device binding conflicts."
+	cat > /etc/modprobe.d/${CONFLICT_BLACKLIST_FILE} << EOF
+# Installed by ${SCRIPT_NAME} to avoid conflicts with out-of-tree ${MODULE_NAME}
+blacklist rtw88_8814au
+EOF
+fi
 
 # determine if dkms is installed and run the appropriate installation routines
 if ! command -v dkms >/dev/null 2>&1; then
