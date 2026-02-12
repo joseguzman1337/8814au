@@ -62,7 +62,7 @@ See `supported-device-IDs` for full list.
 <summary><b>Arch / Garuda / Manjaro</b> — pacman + DKMS</summary>
 
 ```bash
-sudo pacman -S --noconfirm linux-headers dkms git bc iw
+sudo pacman -S --noconfirm linux-headers dkms git iw
 git clone https://github.com/joseguzman1337/8814au.git
 cd 8814au
 sudo ./install-driver.sh
@@ -76,7 +76,7 @@ Note: If using Manjaro on RasPi4B/5B, use `linux-rpi4-headers` instead.
 <summary><b>Ubuntu / Debian / Kali</b> — apt</summary>
 
 ```bash
-sudo apt install -y linux-headers-$(uname -r) build-essential bc dkms git libelf-dev rfkill iw
+sudo apt install -y linux-headers-$(uname -r) build-essential dkms git libelf-dev rfkill iw
 git clone https://github.com/joseguzman1337/8814au.git
 cd 8814au
 sudo ./install-driver.sh
@@ -114,7 +114,7 @@ sudo ./install-driver.sh
 <summary><b>Raspberry Pi OS</b> — apt</summary>
 
 ```bash
-sudo apt install -y raspberrypi-kernel-headers build-essential bc dkms git
+sudo apt install -y raspberrypi-kernel-headers build-essential dkms git
 git clone https://github.com/joseguzman1337/8814au.git
 cd 8814au
 sudo ./install-driver.sh
