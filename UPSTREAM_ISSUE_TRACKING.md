@@ -7,9 +7,9 @@ This PR tracks upstream open issues one-by-one. Status values:
 
 - #160: uscaraudio — support
 - #159: install-driver.sh fails on Kali linux with kernel 6.16.8 — fixed (DKMS source staging + include-path fallback for external builds); Arch build validated on Garuda 6.18.9-zen
-- #158: rtw_switch_usb_mode=1 causes the adapter to auto-disconnect — needs-repro
+- #158: rtw_switch_usb_mode=1 causes the adapter to auto-disconnect — mitigated (added guard to prevent repeated forced USB mode-switch disconnect loops within a module lifetime)
 - #157: Is possible change the 0.xxx watt power? — support
-- #156: Can't get current channel and bandwidth information by 'iw' command — partially mitigated (added cfg80211 channel switch notify on monitor-channel set path; requires on-device validation)
+- #156: Can't get current channel and bandwidth information by 'iw' command — partially mitigated (added cfg80211 channel switch notify on monitor-channel set path; runtime healthcheck now also flags DOWN-link cases where `iw` may omit channel output)
 - #155: installing 8814au on linux mint solution — support
 - #153: Project: Add 8814au in-kernel driver to the Linux Mainline kernel. Need testers... — support
 - #152: 8814au: segfault at 8814au/core/rtw_mlme_ext.c:12187 rtw_mlmeext_disconnect+0x344/0x440 when reloading driver — fixed (guard unexpected disconnect state during teardown)
