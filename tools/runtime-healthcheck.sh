@@ -17,6 +17,15 @@ else
 fi
 echo
 
+echo "== USB topology/speed hint =="
+if command -v lsusb >/dev/null 2>&1; then
+	lsusb -t 2>/dev/null || true
+	echo "Hint: 5000M indicates USB3; 480M indicates USB2 and can cap throughput."
+else
+	echo "lsusb not available"
+fi
+echo
+
 echo "== USB binding detail (0bda:8813) =="
 if [ -d /sys/bus/usb/devices ]; then
 	found_usb=0
@@ -45,11 +54,27 @@ else
 fi
 echo
 
+echo "== RF-kill state =="
+if command -v rfkill >/dev/null 2>&1; then
+	rfkill list || true
+else
+	echo "rfkill not available"
+fi
+echo
+
 echo "== Module state =="
 if command -v lsmod >/dev/null 2>&1; then
 	lsmod | grep -E '^(8814au|rtw88_8814au|rtw88_usb|rtw88_core)\b' || echo "No 8814au/rtw88 modules currently loaded"
 else
 	echo "lsmod not available"
+fi
+echo
+
+echo "== USB/IP forwarding state =="
+if command -v usbip >/dev/null 2>&1; then
+	usbip port 2>/dev/null || echo "No imported USB/IP devices on this host."
+else
+	echo "usbip not available"
 fi
 echo
 
@@ -84,6 +109,17 @@ if command -v ip >/dev/null 2>&1; then
 	echo "Note: some kernels/drivers omit channel details in 'iw dev <if> info' when interface state is DOWN."
 else
 	echo "ip command not available"
+fi
+echo
+
+echo "== NetworkManager responsiveness hint =="
+if command -v nmcli >/dev/null 2>&1; then
+	nmcli general status 2>/dev/null || echo "nmcli query failed"
+else
+	echo "nmcli not available"
+fi
+if command -v systemctl >/dev/null 2>&1; then
+	systemctl is-active NetworkManager 2>/dev/null || true
 fi
 echo
 
