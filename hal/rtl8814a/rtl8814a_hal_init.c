@@ -3170,13 +3170,12 @@ static void hw_var_set_monitor(PADAPTER Adapter, u8 variable, u8 *val)
 		/* Append FCS */
 		rcr_bits |= RCR_APPFCS;
 #endif
-#if 0
 		/*
-		   CRC and ICV packet will drop in recvbuf2recvframe()
-		   We no turn on it.
+		 * In monitor mode we prefer visibility over validation so capture tools
+		 * can observe control traffic even when frames have bad CRC/ICV.
+		 * The previous value is restored when leaving monitor mode.
 		 */
 		rcr_bits |= (RCR_ACRC32 | RCR_AICV);
-#endif
 
 		rtw_hal_get_hwreg(Adapter, HW_VAR_RCR, (u8 *)&pHalData->rcr_backup);
 		pHalData->rxfltmap0_backup = rtw_read16(Adapter, REG_RXFLTMAP0);
