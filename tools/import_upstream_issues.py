@@ -19,6 +19,14 @@ USER_AGENT = "8814au-issue-importer"
 MARKER_RE = re.compile(r"Upstream-Issue:\s*([\w.-]+)/([\w.-]+)#(\d+)", re.IGNORECASE)
 
 
+def encode_component(value: str) -> str:
+    return urllib.parse.quote(value, safe="")
+
+
+def safe_output_path(filename: str) -> str:
+    return filename.rsplit("/", 1)[-1].rsplit("\\", 1)[-1]
+
+
 def gh_request(method: str, url: str, token: str, payload: Dict | None = None, retries: int = 3) -> Dict | List:
     headers = {
         "Accept": "application/vnd.github+json",
@@ -51,7 +59,7 @@ def list_repo_issues(owner: str, repo: str, token: str, state: str) -> Iterable[
     page = 1
     while True:
         q = urllib.parse.urlencode({"state": state, "per_page": 100, "page": page})
-        url = f"{API_ROOT}/repos/{owner}/{repo}/issues?{q}"
+        url = f"{API_ROOT}/repos/{encode_component(owner)}/{encode_component(repo)}/issues?{q}"
         issues = gh_request("GET", url, token)
         if not issues:
             break
@@ -74,7 +82,7 @@ def build_existing_map(target_owner: str, target_repo: str, token: str) -> Dict[
 
 def ensure_labels(target_owner: str, target_repo: str, token: str, labels: List[str]) -> None:
     for label in labels:
-        read_url = f"{API_ROOT}/repos/{target_owner}/{target_repo}/labels/{urllib.parse.quote(label, safe='')}"
+        read_url = f"{API_ROOT}/repos/{encode_component(target_owner)}/{encode_component(target_repo)}/labels/{urllib.parse.quote(label, safe='')}"
         try:
             gh_request("GET", read_url, token)
             continue
@@ -82,7 +90,7 @@ def ensure_labels(target_owner: str, target_repo: str, token: str, labels: List[
             if "(404)" not in str(exc):
                 raise
 
-        create_url = f"{API_ROOT}/repos/{target_owner}/{target_repo}/labels"
+        create_url = f"{API_ROOT}/repos/{encode_component(target_owner)}/{encode_component(target_repo)}/labels"
         gh_request(
             "POST",
             create_url,
@@ -109,7 +117,7 @@ def render_import_body(src_owner: str, src_repo: str, src_issue: Dict) -> str:
 
 
 def create_target_issue(target_owner: str, target_repo: str, token: str, payload: Dict) -> Dict:
-    url = f"{API_ROOT}/repos/{target_owner}/{target_repo}/issues"
+    url = f"{API_ROOT}/repos/{encode_component(target_owner)}/{encode_component(target_repo)}/issues"
     return gh_request("POST", url, token, payload)
 
 
@@ -166,11 +174,11 @@ def main() -> int:
         if args.max_issues > 0 and len(imported) >= args.max_issues:
             break
 
-    with open(args.mapping_file, "w", encoding="utf-8") as file_handle:
+    with open(safe_output_path(args.mapping_file), "w", encoding="utf-8") as file_handle:
         json.dump(imported, file_handle, indent=2)
 
     target_numbers = [item["target"] for item in imported if isinstance(item["target"], int) and item["target"] > 0]
-    with open(args.close_keywords_file, "w", encoding="utf-8") as file_handle:
+    with open(safe_output_path(args.close_keywords_file), "w", encoding="utf-8") as file_handle:
         if target_numbers:
             file_handle.write("\n".join(f"Closes #{number}" for number in target_numbers) + "\n")
         else:
