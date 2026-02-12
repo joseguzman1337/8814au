@@ -256,6 +256,23 @@ This produces a Markdown report plus per-step artifacts under `/tmp/rtl8814au-is
 </details>
 
 <details>
+<summary><b>Zero-reboot runtime validation (multi-host)</b></summary>
+
+This repository now includes a zero-reboot validation path for issue-focused diagnostics in certified environments where kernel/OS state must remain unchanged.
+
+Available tools:
+
+- `tools/runtime-healthcheck.sh`: baseline interface/driver/USB/rfkill/NetworkManager checks
+- `tools/hot-switch-driver.sh`: live bind switch between native `rtw88_8814au` and out-of-tree `8814au` with pre/post snapshots
+- `tools/hotplug-issue-suite.sh`: issue-oriented hot-switch regression run
+- `tools/runtime-issue-suite.sh`: runtime reassessment for upstream reports focused on runtime failures (#120, #117, #115, #106)
+- `tools/injection-selftest.sh`: non-destructive monitor/injection smoke test with time-windowed kernel log checks
+
+All scripts preserve current kernel version and avoid reboot as part of normal operation.
+
+</details>
+
+<details>
 <summary><b>`iw dev &lt;if&gt; info` missing channel/bandwidth fields</b></summary>
 
 If channel fields are missing, first confirm link state:
@@ -342,7 +359,8 @@ Kernels 5.4–6.18.x supported. Compilers: gcc 12, 13, 14, 15.
 
 <p align="center">
   Original project by <a href="https://github.com/morrownr">@morrownr</a><br>
-  Fork maintained by <a href="https://github.com/joseguzman1337">@joseguzman1337</a> & <a href="https://claude.ai">Claude</a>
+  Fork maintained by <a href="https://github.com/joseguzman1337">@joseguzman1337</a> & <a href="https://claude.ai">Claude</a><br>
+  Runtime issue-resolution engineering and validation automation by <a href="https://openai.com">Codex (GPT-5)</a>
 </p>
 
 ## Maintenance Workflow
