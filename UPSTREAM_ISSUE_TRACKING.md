@@ -16,7 +16,7 @@ This PR tracks upstream open issues one-by-one. Status values:
 - #149: awus p1900 / Raspberry Pi5 8Gb / kali-linux-2024.3-raspberry-pi-arm64  — support
 - #148: install-driver.sh fails when SecureBoot is enabled and DKMS is not used  — fixed (Makefile sign-install target already corrected in current branch)
 - #147: Yocto Kirkstone build failure — partially mitigated (removed `bc` dependency from Makefile GCC version check for minimal build roots)
-- #145: Incorrect Rx packet length reported via "tpacket3_hdr->tp_snaplen" (also, awful rx quality, but excellent tx) — needs-repro
+- #145: Incorrect Rx packet length reported via "tpacket3_hdr->tp_snaplen" (also, awful rx quality, but excellent tx) — partially mitigated (radiotap no longer unconditionally advertises appended FCS, avoiding misleading capture-length interpretation)
 - #143: hostapd 2.11 — support
 - #141: Doesnt work on Arch Linux Kernel 6.10.6 zen — fixed/mitigated (added install-time blacklist for in-kernel `rtw88_8814au` to prevent USB ID binding conflicts with out-of-tree `8814au`; added install/remove runtime conflict warnings; conflict reproduced on sx1 and validated via per-interface USB binding diagnostics)
 - #140: dkms build error:  10 — fixed (Arch validation: clean DKMS remove/install now removes stale versions and installs current version successfully)
