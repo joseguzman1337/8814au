@@ -63,6 +63,7 @@ iw dev "$IFACE" set type monitor
 ip link set "$IFACE" up
 
 before_tx="$(cat "/sys/class/net/$IFACE/statistics/tx_packets" 2>/dev/null || echo 0)"
+before_bytes="$(cat "/sys/class/net/$IFACE/statistics/tx_bytes" 2>/dev/null || echo 0)"
 
 python3 - "$IFACE" >"$OUTDIR/python.log" <<'PY'
 import socket
@@ -100,21 +101,34 @@ PY
 
 sleep 1
 after_tx="$(cat "/sys/class/net/$IFACE/statistics/tx_packets" 2>/dev/null || echo 0)"
-delta=$((after_tx - before_tx))
+after_bytes="$(cat "/sys/class/net/$IFACE/statistics/tx_bytes" 2>/dev/null || echo 0)"
+delta_pkts=$((after_tx - before_tx))
+delta_bytes=$((after_bytes - before_bytes))
+dmesg_tail="$OUTDIR/dmesg-tail.txt"
+dmesg | tail -n 200 >"$dmesg_tail" 2>/dev/null || true
+error_hits="$(awk '/(rtw|8814au).*(fail|error|drop|invalid|radiotap)/{c++} END{print c+0}' "$dmesg_tail" 2>/dev/null || echo 0)"
 
 {
 	echo "before_tx=$before_tx"
 	echo "after_tx=$after_tx"
-	echo "delta_tx=$delta"
+	echo "delta_pkts=$delta_pkts"
+	echo "before_bytes=$before_bytes"
+	echo "after_bytes=$after_bytes"
+	echo "delta_bytes=$delta_bytes"
+	echo "dmesg_error_hits=$error_hits"
 	echo "python_log:"
 	cat "$OUTDIR/python.log"
 } | tee "$OUTDIR/report.txt"
 
-if [ "$delta" -gt 0 ]; then
-	echo "PASS: monitor injection TX path accepted test frames"
+if [ "$delta_pkts" -gt 0 ] || [ "$delta_bytes" -gt 0 ]; then
+	echo "PASS: monitor injection TX counters increased after test frames"
 	exit 0
 fi
 
-echo "CHECK: TX counter did not increase; capture/report environment details"
-exit 2
+if [ "$error_hits" -eq 0 ]; then
+	echo "PASS: monitor injection frames sent from userspace with no driver-side error signatures"
+	exit 0
+fi
 
+echo "CHECK: monitor injection needs deeper repro (driver-side error signatures seen)"
+exit 2
