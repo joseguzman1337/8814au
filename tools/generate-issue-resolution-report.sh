@@ -58,6 +58,15 @@ resolution_for_issue() {
 	141|149|133|156)
 		echo "Use hot-plug workflow: run \`tools/hot-switch-driver.sh\` (or \`tools/hotplug-issue-suite.sh\`) to A/B native vs out-of-tree binding, collect snapshots, then lock policy to one driver in maintenance window."
 		;;
+	120|117|115|106)
+		echo "Run \`tools/runtime-issue-suite.sh\` plus \`tools/runtime-healthcheck.sh\` to capture NM/RF/USB-speed/runtime evidence; apply hot-switch policy where conflicts are observed."
+		;;
+	70|47)
+		echo "Use updated monitor pipeline (RXFLTMAP0/1/2 + monitor CRC/ICV acceptance), then validate with monitor capture on target host and attach control-frame evidence."
+		;;
+	17)
+		echo "Use hardened radiotap monitor TX parser and run \`tools/injection-selftest.sh --iface <if>\` on AWUS1900 host; attach generated report."
+		;;
 	159|140|99|114|148|147|129)
 		echo "Use installer/Makefile hardening already in PR; run build-only validation and DKMS status checks. Compare logs against generated healthcheck artifacts."
 		;;

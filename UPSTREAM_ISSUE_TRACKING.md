@@ -4,7 +4,6 @@ This PR tracks upstream open issues one-by-one. Status values:
 - fixed: code change in this PR
 - mitigated: risk reduced with a validated code/ops change in this PR
 - resolved-support: pass under maintainer policy with concrete guidance/diagnostics
-- resolved-with-repro-request: pass under maintainer policy, with targeted repro data required for any further code extension
 
 - #160: uscaraudio — resolved-support (pass under maintainer policy; guidance and diagnostics provided)
 - #159: install-driver.sh fails on Kali linux with kernel 6.16.8 — fixed (DKMS source staging + include-path fallback for external builds); Arch build validated on Garuda 6.18.9-zen
