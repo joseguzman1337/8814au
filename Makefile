@@ -40,13 +40,13 @@ ccflags-y += -Wno-address
 ccflags-y += -Wframe-larger-than=1648
 ccflags-y += -Wno-cast-function-type
 
-# gcc-13
-ccflags-y += -Wno-enum-int-mismatch
-ccflags-y += -Wno-stringop-overread
-ccflags-y += -Wno-enum-conversion
-ccflags-y += -Wno-int-in-bool-context
-ccflags-y += -Wno-missing-prototypes
-ccflags-y += -Wno-missing-declarations
+# Add warning-suppression flags only when compiler supports them.
+ccflags-y += $(shell $(CC) -Wno-enum-int-mismatch -E -x c /dev/null >/dev/null 2>&1 && echo -Wno-enum-int-mismatch)
+ccflags-y += $(shell $(CC) -Wno-stringop-overread -E -x c /dev/null >/dev/null 2>&1 && echo -Wno-stringop-overread)
+ccflags-y += $(shell $(CC) -Wno-enum-conversion -E -x c /dev/null >/dev/null 2>&1 && echo -Wno-enum-conversion)
+ccflags-y += $(shell $(CC) -Wno-int-in-bool-context -E -x c /dev/null >/dev/null 2>&1 && echo -Wno-int-in-bool-context)
+ccflags-y += $(shell $(CC) -Wno-missing-prototypes -E -x c /dev/null >/dev/null 2>&1 && echo -Wno-missing-prototypes)
+ccflags-y += $(shell $(CC) -Wno-missing-declarations -E -x c /dev/null >/dev/null 2>&1 && echo -Wno-missing-declarations)
 
 # Avoid external 'bc' dependency in minimal build roots (Yocto, Alpine, etc.).
 GCC_GE_49 := $(shell $(CC) -dumpversion | awk -F. '{if (($$1+0)>4 || (($$1+0)==4 && ($$2+0)>=9)) print 1; else print 0}')
