@@ -80,6 +80,13 @@ echo ": ${KVER} (kernel version)"
 echo ": ---------------------------"
 echo
 
+if command -v lsmod >/dev/null 2>&1; then
+	if lsmod | grep -q '^8814au\b' && lsmod | grep -q '^rtw88_8814au\b'; then
+		echo "Warning: both 8814au and rtw88_8814au are currently loaded."
+		echo "Runtime behavior may stay mixed until operator-controlled rebind/replug/reboot."
+	fi
+fi
+
 # check for and remove non-dkms installations
 # standard naming
 if [ -f "${MODDESTDIR}${MODULE_NAME}.ko" ]; then

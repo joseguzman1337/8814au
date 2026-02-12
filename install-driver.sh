@@ -196,6 +196,15 @@ echo
 
 echo "Checking for previously installed drivers."
 
+if command -v lsmod >/dev/null 2>&1; then
+	if lsmod | grep -q '^8814au\b' && lsmod | grep -q '^rtw88_8814au\b'; then
+		echo ": ---------------------------"
+		echo "Warning: both 8814au and rtw88_8814au are currently loaded."
+		echo "This mixed-driver runtime state can cause unstable behavior."
+		echo "The install will proceed, but runtime changes may require rebind/replug/reboot by operator policy."
+	fi
+fi
+
 # check for and remove non-dkms installations
 # standard naming
 if [ -f "${MODDESTDIR}${MODULE_NAME}.ko" ]; then
