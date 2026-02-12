@@ -18,7 +18,7 @@ This PR tracks upstream open issues one-by-one. Status values:
 - #147: Yocto Kirkstone build failure — partially mitigated (removed `bc` dependency from both Makefile GCC version check and install script preflight for minimal build roots)
 - #145: Incorrect Rx packet length reported via "tpacket3_hdr->tp_snaplen" (also, awful rx quality, but excellent tx) — partially mitigated (radiotap no longer unconditionally advertises appended FCS, avoiding misleading capture-length interpretation)
 - #143: hostapd 2.11 — support
-- #141: Doesnt work on Arch Linux Kernel 6.10.6 zen — fixed/mitigated (added install-time blacklist for in-kernel `rtw88_8814au` to prevent USB ID binding conflicts with out-of-tree `8814au`; added install/remove runtime conflict warnings; conflict reproduced on sx1 and validated via per-interface USB binding diagnostics)
+- #141: Doesnt work on Arch Linux Kernel 6.10.6 zen — fixed/mitigated (added install-time blacklist for in-kernel `rtw88_8814au` to prevent USB ID binding conflicts with out-of-tree `8814au`; added install/remove runtime conflict warnings; added snapshot-backed hot-switch script to rebind without recompile/uninstall/reboot; validated both native<->oot switch directions on sx1)
 - #140: dkms build error:  10 — fixed (Arch validation: clean DKMS remove/install now removes stale versions and installs current version successfully)
 - #139: Build issue on 5.14 kernel / Rockylinux 9 — needs-repro
 - #137: Rate Limit of Injection Frame — support
