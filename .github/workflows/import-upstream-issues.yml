@@ -24,9 +24,14 @@ on:
         required: true
         default: "0"
 
+concurrency:
+  group: import-upstream-issues-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   import-issues:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     permissions:
       issues: write
       contents: read

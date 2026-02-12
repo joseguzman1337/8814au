@@ -287,4 +287,4 @@ Because PR auto-close keywords only close issues in the same repository, this fo
 3. Optionally set `max_issues` (for phased imports), then run again with `dry_run=false` to create imported issues in this fork.
 4. Download `auto-close-keywords.md` from workflow artifacts and paste its `Closes #...` lines into your PR description.
 
-The workflow uses `tools/import_upstream_issues.py` and `GITHUB_TOKEN` (`issues: write`).
+The workflow uses `tools/import_upstream_issues.py` (note the `.py` extension) and `GITHUB_TOKEN` (`issues: write`).

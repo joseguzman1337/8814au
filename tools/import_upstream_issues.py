@@ -74,12 +74,21 @@ def build_existing_map(target_owner: str, target_repo: str, token: str) -> Dict[
 
 def ensure_labels(target_owner: str, target_repo: str, token: str, labels: List[str]) -> None:
     for label in labels:
-        url = f"{API_ROOT}/repos/{target_owner}/{target_repo}/labels/{urllib.parse.quote(label, safe='')}"
+        read_url = f"{API_ROOT}/repos/{target_owner}/{target_repo}/labels/{urllib.parse.quote(label, safe='')}"
         try:
-            gh_request("GET", url, token)
-        except RuntimeError:
-            create_url = f"{API_ROOT}/repos/{target_owner}/{target_repo}/labels"
-            gh_request("POST", create_url, token, {"name": label, "color": "1D76DB", "description": "Imported from upstream repository"})
+            gh_request("GET", read_url, token)
+            continue
+        except RuntimeError as exc:
+            if "(404)" not in str(exc):
+                raise
+
+        create_url = f"{API_ROOT}/repos/{target_owner}/{target_repo}/labels"
+        gh_request(
+            "POST",
+            create_url,
+            token,
+            {"name": label, "color": "1D76DB", "description": "Imported from upstream repository"},
+        )
 
 
 def render_import_body(src_owner: str, src_repo: str, src_issue: Dict) -> str:
@@ -130,8 +139,16 @@ def main() -> int:
     imported: List[Dict[str, int | str]] = []
     for source_issue in list_repo_issues(args.source_owner, args.source_repo, args.token, args.state):
         key = (args.source_owner, args.source_repo, source_issue["number"])
+        item: Dict[str, int | str] = {
+            "source": source_issue["number"],
+            "source_url": source_issue["html_url"],
+            "target": -1,
+            "action": "would_create",
+        }
+
         if key in existing:
-            imported.append({"source": source_issue["number"], "target": existing[key], "action": "already_exists"})
+            item["target"] = existing[key]
+            item["action"] = "already_exists"
         else:
             payload = {
                 "title": f"[upstream #{source_issue['number']}] {source_issue['title']}",
@@ -139,11 +156,13 @@ def main() -> int:
                 "labels": args.label,
             }
             if args.dry_run:
-                imported.append({"source": source_issue["number"], "target": -1, "action": "would_create"})
+                item["action"] = "would_create"
             else:
                 created = create_target_issue(args.target_owner, args.target_repo, args.token, payload)
-                imported.append({"source": source_issue["number"], "target": created["number"], "action": "created"})
+                item["target"] = created["number"]
+                item["action"] = "created"
 
+        imported.append(item)
         if args.max_issues > 0 and len(imported) >= args.max_issues:
             break
 
