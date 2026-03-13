@@ -5,3 +5,6 @@ Module.symvers
 *.mod
 *.mod.c
 *.o
+# macOS system files
+.DS_Store
+._*
